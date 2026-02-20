@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EV Charge Calc - Rahmat Saleh</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -15,152 +15,55 @@
             --text-muted: #64748b;
             --danger: #ef4444;
             --success: #10b981;
+            --warning: #f59e0b;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 450px; }
+        
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { 
+            font-size: 2.2rem; font-weight: 800; margin: 0; 
+            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
+        .sub-header { display: inline-block; margin-top: 8px; padding: 4px 14px; background: #e0f2fe; color: #0369a1; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
 
-        .app-container {
-            width: 100%;
-            max-width: 450px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 24px;
-            border-radius: 24px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
+        .card { background: var(--card-bg); padding: 28px; border-radius: 30px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); }
         .input-group { margin-bottom: 18px; }
-        .input-group label {
-            display: block;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
+        .input-group label { display: block; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
+        input { width: 100%; padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; transition: 0.3s; }
+        input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            background: #f8fafc;
-        }
+        button.btn-main { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%); color: white; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: 700; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3); margin-top: 10px; transition: 0.2s; }
+        button.btn-main:active { transform: scale(0.97); }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        button.btn-main {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.4);
-        }
-
-        /* STAMP / CREDITS STYLING (DIKECILKAN & DISAMARKAN) */
-        .stamp-container {
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px solid #f1f5f9;
-            text-align: center;
-            opacity: 0.6; /* Membuat tampilan lebih samar */
-        }
-
-        .made-by {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-bottom: 2px;
-            display: block;
-        }
-
-        .author-name {
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .social-links a {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-size: 1rem;
-            transition: color 0.2s;
-        }
-
+        .stamp-container { margin-top: 35px; padding-top: 20px; border-top: 1px solid #f1f5f9; text-align: center; opacity: 0.5; }
+        .made-by { font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; display: block; }
+        .author-name { font-weight: 600; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; display: block; }
+        .social-links { display: flex; justify-content: center; gap: 15px; }
+        .social-links a { color: var(--text-muted); font-size: 1rem; transition: 0.2s; }
         .social-links a:hover { color: var(--primary); }
 
-        /* MODAL STYLES */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 420px;
-            padding: 25px;
-            border-radius: 28px;
-            animation: modalSlide 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes modalSlide { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .res-header { text-align: center; margin-bottom: 20px; }
-        .res-value { font-size: 2.2rem; font-weight: 800; color: var(--success); margin: 5px 0; }
-        .detail-section { border-top: 1px solid #f1f5f9; padding-top: 15px; }
-        .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem; }
-        .summary-box { background: #f0fdf4; color: #166534; padding: 15px; border-radius: 16px; font-size: 0.88rem; line-height: 1.6; margin-top: 15px; border-left: 4px solid var(--success); }
-        .btn-close { width: 100%; padding: 12px; background: #f1f5f9; color: #475569; border: none; border-radius: 12px; margin-top: 20px; font-weight: 600; cursor: pointer; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: white; width: 100%; max-width: 420px; padding: 30px; border-radius: 35px; animation: modalSlide 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes modalSlide { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .res-header { text-align: center; margin-bottom: 25px; }
+        .res-value { font-size: 2.5rem; font-weight: 800; color: var(--success); margin: 5px 0; }
+        .detail-section { border-top: 1px dashed #e2e8f0; padding-top: 20px; }
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+        .summary-box { background: #f0fdf4; color: #14532d; padding: 18px; border-radius: 20px; font-size: 0.88rem; line-height: 1.6; margin-top: 20px; border: 1px solid #dcfce7; }
+        .btn-close { width: 100%; padding: 14px; background: #f1f5f9; color: #475569; border: none; border-radius: 14px; margin-top: 20px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
         <header>
-            <h1 style="font-size: 1.6rem; margin:0; letter-spacing: -1px;">⚡ EV Calculator</h1>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Estimasi biaya & waktu pengisian daya</p>
+            <h1><i class="fa-solid fa-bolt-lightning" style="color: #f59e0b;"></i> Smart EV Calc</h1>
+            <div class="sub-header">Estimasi Biaya & Waktu Cas</div>
         </header>
 
         <div class="card">
@@ -168,34 +71,16 @@
                 <label>Kapasitas Baterai (kWh)</label>
                 <input type="number" id="capacity" step="0.1" oninput="saveData()">
             </div>
-
             <div class="grid-2">
-                <div class="input-group">
-                    <label>SoC Awal (%)</label>
-                    <input type="number" id="startLevel" oninput="saveData()">
-                </div>
-                <div class="input-group">
-                    <label>SoC Target (%)</label>
-                    <input type="number" id="targetLevel" oninput="saveData()">
-                </div>
+                <div class="input-group"><label>SoC Awal (%)</label><input type="number" id="startLevel" oninput="saveData()"></div>
+                <div class="input-group"><label>SoC Target (%)</label><input type="number" id="targetLevel" oninput="saveData()"></div>
             </div>
-
             <div class="grid-2">
-                <div class="input-group">
-                    <label>Daya Cas (kW)</label>
-                    <input type="number" id="power" step="0.1" oninput="saveData()">
-                </div>
-                <div class="input-group">
-                    <label>Tarif (Rp/kWh)</label>
-                    <input type="number" id="tariff" oninput="saveData()">
-                </div>
+                <div class="input-group"><label>Daya Cas (kW)</label><input type="number" id="power" step="0.1" oninput="saveData()"></div>
+                <div class="input-group"><label>Tarif (Rp/kWh)</label><input type="number" id="tariff" oninput="saveData()"></div>
             </div>
-
-            <div class="input-group">
-                <label>Energy Loss (%)</label>
-                <input type="number" id="energyLoss" oninput="saveData()">
-            </div>
-
+            <div class="input-group"><label>Energy Loss (%)</label><input type="number" id="energyLoss" oninput="saveData()"></div>
+            
             <button class="btn-main" onclick="calculate()">Hitung Estimasi</button>
 
             <div class="stamp-container">
@@ -203,9 +88,9 @@
                 <span class="author-name">Rahmat Saleh</span>
                 <div class="social-links">
                     <a href="https://instagram.com/rach.mad40" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://facebook.com/rahmat saleh" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.facebook.com/abdulloh.sholih.2025/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
                     <a href="https://tiktok.com/@rahmat.saleh475" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="https://youtube.com/@pesonadronenusantara" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://youtube.com/@pesonadronenusantara" target="_blank"><i class="fa-brands fa-youtube"></i></a>
                 </div>
             </div>
         </div>
@@ -214,19 +99,17 @@
     <div id="resultModal" class="modal-overlay">
         <div class="modal-content">
             <div class="res-header">
-                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Estimasi Biaya</span>
+                <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Estimasi Biaya</span>
                 <div id="costRes" class="res-value">--</div>
-                <div id="timeResTop" style="color: var(--primary); font-weight: 700; font-size: 1.1rem;">⏱️ --</div>
+                <div id="timeResTop" style="color: var(--primary); font-weight: 800; font-size: 1.2rem;">⏱️ --</div>
             </div>
-
             <div class="detail-section">
-                <div class="detail-row"><span class="detail-label">Energi Terisi (Netto)</span><span id="netRes" class="detail-val">--</span></div>
-                <div class="detail-row"><span class="detail-label" id="lossLabel">Energy Loss</span><span id="lossRes" class="detail-val" style="color: var(--danger);">--</span></div>
-                <div class="detail-row"><span class="detail-label">Total Energi dari PLN</span><span id="plnRes" class="detail-val">--</span></div>
+                <div class="detail-row"><span>Energi Netto (Baterai)</span><span id="netRes" style="font-weight:600">--</span></div>
+                <div class="detail-row"><span id="lossLabelDetail">Nilai Loss</span><span id="lossRes" style="font-weight:600; color: var(--danger);">--</span></div>
+                <div class="detail-row"><span>Total Energi PLN (+Loss)</span><span id="plnRes" style="font-weight:600">--</span></div>
             </div>
-
             <div id="summaryText" class="summary-box"></div>
-            <button class="btn-close" onclick="closeModal()">Tutup</button>
+            <button class="btn-close" onclick="closeModal()">Selesai</button>
         </div>
     </div>
 
@@ -237,12 +120,18 @@
         }
 
         function loadData() {
-            const defaults = { 'capacity': '26.7', 'startLevel': '30', 'targetLevel': '100', 'power': '6.6', 'tariff': '1699', 'energyLoss': '10' };
+            const defaults = { 'capacity': '50.6', 'startLevel': '20', 'targetLevel': '100', 'power': '50', 'tariff': '2467', 'energyLoss': '10' };
             Object.keys(defaults).forEach(id => {
                 const saved = localStorage.getItem('ev_' + id);
                 document.getElementById(id).value = (saved !== null) ? saved : defaults[id];
             });
         }
+
+        const fmtTime = (hr) => {
+            const h = Math.floor(hr);
+            const m = Math.round((hr - h) * 60);
+            return h > 0 ? `${h}j ${m}m` : `${m} menit`;
+        };
 
         function calculate() {
             const cap = parseFloat(document.getElementById('capacity').value);
@@ -254,24 +143,70 @@
 
             if (target <= start) return alert("Target SoC harus lebih tinggi!");
 
-            const energyNeeded = cap * ((target - start) / 100);
-            const lossKwh = energyNeeded * (lossPercent / 100);
-            const totalEnergyPLN = energyNeeded + lossKwh;
+            const energyNet = cap * ((target - start) / 100);
+            const lossKwh = energyNet * (lossPercent / 100);
+            const totalEnergyPLN = energyNet + lossKwh;
             const totalCost = totalEnergyPLN * price;
-            const hours = energyNeeded / pwr;
-            const h = Math.floor(hours);
-            const m = Math.round((hours - h) * 60);
-            const timeStr = `${h} jam ${m} menit`;
+
+            // Logika Pembulatan Kelipatan 5 Ke Atas
+            const purchaseSuggestion = Math.ceil(totalEnergyPLN / 5) * 5;
+
+            let t1 = 0, t2 = 0, t3 = 0;
+            let current = start;
+            let chargerType = "";
+
+            if (pwr > 7.7) {
+                if (pwr >= 30) chargerType = "Kamu menggunakan DC charging";
+                else chargerType = "Mode AC Charging / Medium Speed";
+
+                if (current < 80) {
+                    let s1Target = Math.min(target, 80);
+                    t1 = (cap * ((s1Target - current) / 100)) / pwr;
+                    current = s1Target;
+                }
+                if (current >= 80 && target > 80) {
+                    let s2Target = Math.min(target, 90);
+                    let p2 = Math.min(pwr, 30);
+                    t2 = (cap * ((s2Target - current) / 100)) / p2;
+                    current = s2Target;
+                }
+                if (current >= 90 && target > 90) {
+                    let p3 = Math.min(pwr, 10);
+                    t3 = (cap * ((target - current) / 100)) / p3;
+                }
+            } else {
+                t1 = energyNet / pwr;
+                if (pwr <= 2.2) chargerType = "Kamu sedang mengisi dengan portable charger";
+                else chargerType = "Mode AC Charging / Medium Speed";
+            }
+
+            const totalH = t1 + t2 + t3;
+            const h = Math.floor(totalH);
+            const m = Math.round((totalH - h) * 60);
 
             document.getElementById('costRes').textContent = 'Rp ' + Math.round(totalCost).toLocaleString('id-ID');
-            document.getElementById('timeResTop').textContent = `⏱️ ${timeStr}`;
-            document.getElementById('netRes').textContent = `${energyNeeded.toFixed(2)} kWh`;
+            document.getElementById('timeResTop').textContent = `⏱️ ${h}j ${m}m`;
+            document.getElementById('netRes').textContent = `${energyNet.toFixed(2)} kWh`;
             document.getElementById('lossRes').textContent = `+${lossKwh.toFixed(2)} kWh`;
             document.getElementById('plnRes').textContent = `${totalEnergyPLN.toFixed(2)} kWh`;
-            document.getElementById('lossLabel').textContent = `Energy Loss (${lossPercent}%)`;
-            
-            document.getElementById('summaryText').innerHTML = `Mengisi daya dari <b>${start}%</b> ke <b>${target}%</b> memerlukan <b>${energyNeeded.toFixed(2)} kWh</b>. Dengan <i>loss</i> ${lossPercent}%, PLN menarik <b>${totalEnergyPLN.toFixed(2)} kWh</b>. Waktu estimasi: <b>${timeStr}</b> dengan biaya <b>Rp ${Math.round(totalCost).toLocaleString('id-ID')}</b>.`;
+            document.getElementById('lossLabelDetail').textContent = `Nilai Loss (${lossPercent}%)`;
 
+            let rincian = "";
+            if (pwr > 7.7) {
+                if (t1 > 0) rincian += `• ${start}%-80%: ~${fmtTime(t1)} (Kec Maksimal)<br>`;
+                if (t2 > 0) rincian += `• 80%-90%: ~${fmtTime(t2)} (Menurun)<br>`;
+                if (t3 > 0) rincian += `• 90%-100%: ~${fmtTime(t3)} (Sangat Lambat)`;
+            } else {
+                rincian = `• Pengisian stabil ${pwr}kW`;
+            }
+
+            document.getElementById('summaryText').innerHTML = `
+                Isi daya <b>${start}% ke ${target}%</b> butuh <b>${totalEnergyPLN.toFixed(2)} kWh</b> (termasuk loss). Biaya: <b>Rp ${Math.round(totalCost).toLocaleString('id-ID')}</b>.<br>
+                <br>⚠️ <b>Penting:</b> Pastikan kWh yang anda beli tidak kurang dari <b>${purchaseSuggestion} kWh</b> agar target SoC tercapai.<br>
+                <br><b>Info Pengisian:</b><br>
+                • ${chargerType}<br>
+                ${rincian}
+            `;
             document.getElementById('resultModal').style.display = 'flex';
         }
 
