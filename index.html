@@ -158,37 +158,59 @@
             let current = start;
             let chargerType = "";
 
-            if (pwr > 7.7) {
-                if (pwr >= 30) chargerType = "Kamu menggunakan DC charging";
-                else chargerType = "Mode AC Charging / Medium Speed";
+if (pwr > 7.7) {
+                chargerType = pwr >= 30 ? "⚡ DC Fast Charging" : "🔌 AC Charging (Medium)";
 
+                // TAHAP 1: Start SoC sampai 80% (Daya Rata-rata ~89% dari Peak)
                 if (current < 80) {
                     let s1Target = Math.min(target, 80);
-                    t1 = (cap * ((s1Target - current) / 100)) / pwr;
+                    // 0.89 adalah pengali berdasarkan data 13%-80% (38 menit)
+                    t1 = (cap * ((s1Target - current) / 100)) / (pwr * 0.89);
                     current = s1Target;
                 }
+                
+                // TAHAP 2: 80% sampai 90% (Daya Rata-rata ~56% dari Peak)
                 if (current >= 80 && target > 80) {
                     let s2Target = Math.min(target, 90);
-                    let p2 = Math.min(pwr, 30);
-                    t2 = (cap * ((s2Target - current) / 100)) / p2;
+                    // 0.56 adalah pengali berdasarkan data 80%-90% (9 menit)
+                    t2 = (cap * ((s2Target - current) / 100)) / (pwr * 0.56);
                     current = s2Target;
                 }
+                
+                // TAHAP 3: 90% sampai 100% (Sangat Agresif di Data Kamu)
                 if (current >= 90 && target > 90) {
-                    let p3 = Math.min(pwr, 10);
-                    t3 = (cap * ((target - current) / 100)) / p3;
+                    // Berdasarkan data kamu 90%-100% (5 menit), daya rata-ratanya tinggi (~1.2x Peak)
+                    // Tapi untuk aman secara sistem, kita asumsikan 100% daya peak (1.0)
+                    t3 = (cap * ((target - current) / 100)) / (pwr * 1.0);
                 }
+            
+            
             } else {
                 t1 = energyNet / pwr;
                 if (pwr <= 2.2) chargerType = "Kamu sedang mengisi dengan portable charger";
                 else chargerType = "Mode AC Charging / Medium Speed";
             }
 
-            const totalH = t1 + t2 + t3;
+const totalH = t1 + t2 + t3;
             const h = Math.floor(totalH);
             const m = Math.round((totalH - h) * 60);
 
+            // Logika Jam Selesai
+            const sekarang = new Date();
+            const jamSelesai = new Date(sekarang.getTime() + (totalH * 60 * 60 * 1000));
+            const jamFmt = jamSelesai.getHours().toString().padStart(2, '0');
+            const menitFmt = jamSelesai.getMinutes().toString().padStart(2, '0');
+
+            // Update UI Modal
             document.getElementById('costRes').textContent = 'Rp ' + Math.round(totalCost).toLocaleString('id-ID');
-            document.getElementById('timeResTop').textContent = `⏱️ ${h}j ${m}m`;
+            
+            // Tampilan Waktu Bertingkat
+            document.getElementById('timeResTop').innerHTML = `
+                <div class="counting">⏱️ ${h}j ${m}m</div>
+                <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-top: 8px; background: #f1f5f9; display: inline-block; padding: 5px 15px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <i class="fa-regular fa-clock"></i> Selesai pukul ${jamFmt}:${menitFmt}
+                </div>
+            `;
             document.getElementById('netRes').textContent = `${energyNet.toFixed(2)} kWh`;
             document.getElementById('lossRes').textContent = `+${lossKwh.toFixed(2)} kWh`;
             document.getElementById('plnRes').textContent = `${totalEnergyPLN.toFixed(2)} kWh`;
